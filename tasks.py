@@ -38,10 +38,10 @@ def create_person(self, body):
             person_id = response.json()['data']['id']
 
     print('Pessoa já cadastrada')
-
-    person_id = response.json()['data']['items'][0]['item']['id']
-    title = response.json()['data']['items'][0]['item']['name']
-    owner_id = response.json()['data']['items'][0]['item']['owner']['id']
+    print(response.json()['data'])
+    person_id = response.json()['data']['id']
+    title = response.json()['data']['name']
+    owner_id = response.json()['data']['owner_id']['id']
     
     return {
             "title": title,

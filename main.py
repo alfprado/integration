@@ -6,7 +6,7 @@ import json
 app = FastAPI()
 
 
-@app.post("/rds_form")
+@app.post("/cretae_lead")
 async def create_person_pipdrive(request: Request):
     
     json = await request.json()
@@ -41,3 +41,6 @@ async def create_person_pipdrive(request: Request):
         create_lead.s(),)()
     
      
+@app.get("/callback")
+async def callback(request: Request):
+    print(await request.json())

@@ -2,6 +2,9 @@
 
 $ pip install -r requirements.txt
 
+## Inicia o broker
+docker-compose up -d
+
 ## Inicia a Api
 $ uvicorn main:app --reload
 

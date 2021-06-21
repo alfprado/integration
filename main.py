@@ -1,12 +1,11 @@
 from fastapi import FastAPI, Request
-from tasks import create_lead, create_person
+from tasks import create_lead, create_person, update_person
 from celery import chain
 import json
 
 app = FastAPI()
 
-
-@app.post("/cretae_lead")
+@app.post("/create_lead")
 async def create_person_pipdrive(request: Request):
     
     json = await request.json()
@@ -16,31 +15,29 @@ async def create_person_pipdrive(request: Request):
     uuid = json['leads'][0]['uuid']
     telefone = json['leads'][0]['personal_phone']
 
-    body = {
-        "name": nome,
-        "phone": [
-            {
-            "label": "work",
-            "value": telefone,
-            "primary": True
-            }
-        ],
-        "email": [
-            {
-            "label": "work",
-            "value": email,
-            "primary": True
-            }
-        ],
-        "5393d60f6fce8d6992306d1ab458011f661465c8": uuid
-    }
+    data = {'nome': nome, 'email': email, 'uuid': uuid, 'telefone': telefone}
 
-    #create_lead.delay(body)
     task_id = chain(
-        create_person.s(body),
+        create_person.s(data),
         create_lead.s(),)()
+
+@app.post('/update_person')
+async def update_person_pipdrive(request: Request):
+
+    json = await request.json()
     
-     
-@app.get("/callback")
-async def callback(request: Request):
-    print(await request.json())
+    email = json['leads'][0]['email']
+    uuid = json['leads'][0]['uuid']
+    profissao = json['leads'][0]['last_conversion']['content']['Profissão']
+    endereco = json['leads'][0]['last_conversion']['content']['Endereço']
+    documento = json['leads'][0]['last_conversion']['content']['Documento']
+    
+    data = {
+        'email': email, 
+        'uuid': uuid, 
+        'profissao': profissao,
+        'endereco': endereco, 
+        'documento': documento
+    }
+    
+    task_id = update_person.delay(data)

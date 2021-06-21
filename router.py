@@ -3,9 +3,7 @@ from tasks import create_lead, create_person, update_person
 from celery import chain
 import json
 
-router = APIRouter(
-    tags=['Pipdrive']
-)
+router = APIRouter()
 
 @router.post("/create_lead")
 async def create_person_pipdrive(request: Request):

@@ -18,8 +18,8 @@ def create_person(self, data):
         f'{BASE_PIPEDRIVE}/persons/search', 
         params={
             'api_token': f'{API_KEY}',
-            'fields': 'custom_fields',
-            'term': data['uuid']
+            'fields': 'email',
+            'term': data['email']
         })
 
     if response.status_code != 200:
@@ -81,7 +81,7 @@ def create_person(self, data):
     )
 def create_lead(self, data):
     
-    if body is not None:
+    if data is not None:
         
         response = requests.post(f'{BASE_PIPEDRIVE}/leads', params={'api_token': f'{API_KEY}'}, json=data)
     
